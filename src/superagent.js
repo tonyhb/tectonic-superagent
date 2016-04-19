@@ -31,7 +31,7 @@ const fromSuperagent = (sourceDef, query, success, fail) => {
   // Parse query params. Only allow query params starting with a letter so that
   // we keep ports:
   // http://localhost:8080/?id=:id1 only replaces id1.
-  const params = url.match(/:([a-zA-Z](\w+)?)/g);
+  const params = url.match(/:([a-zA-Z](\w+)?)/g) || [];
   params.forEach(p => {
     let key = p.replace(':', '');
     url = url.replace(p, query.params[key]);
