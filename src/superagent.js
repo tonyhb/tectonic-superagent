@@ -1,6 +1,7 @@
 'use strict';
 
 import sa from 'superagent';
+import { request } from './request.js';
 
 /**
  * fromSuperagent is a driver for using superagent with Tectonic.
@@ -25,7 +26,7 @@ import sa from 'superagent';
  */
 const fromSuperagent = (sourceDef, query, success, fail) => {
   let {
-    meta: { url, transform, request }
+    meta: { url, transform, method, headers }
   } = sourceDef;
 
   // Parse query params. Only allow query params starting with a letter so that
@@ -37,17 +38,24 @@ const fromSuperagent = (sourceDef, query, success, fail) => {
     url = url.replace(p, query.params[key]);
   });
 
-  // TODO: Add query parameters to URL
-
-  // If we have modifications to the request from the sourcedefinition we should
-  // apply them here.
-  if (request) {
-    request = request(sa.get(url));
+  // Normalize method type
+  if (method === undefined) {
+    method = 'GET';
   } else {
-    request = sa.get(url);
+    method = method.toUpperCase();
   }
 
-  request.end((err, res) => {
+  // Create a new request
+  const r = request(method, url);
+  if (headers) {
+    r.set(headers);
+  }
+
+  if (query.body) {
+    r.send(query.body);
+  }
+
+  r.end((err, res) => {
     // If this errored call fail
     if (err !== null) {
       console.warn('Error with superagent request: ', err);
@@ -60,6 +68,7 @@ const fromSuperagent = (sourceDef, query, success, fail) => {
 
     return success(res.body);
   });
-};
+}
 
 export default fromSuperagent;
+export { setRequest } from './request.js';
