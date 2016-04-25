@@ -46,9 +46,15 @@ const fromSuperagent = (sourceDef, query, success, fail) => {
   }
 
   // Create a new request
-  const r = request(method, url);
+  let r = request(method, url);
   if (headers) {
     r.set(headers);
+  }
+
+  // If there's a meta.request parameter we should use it to transform the
+  // request
+  if (typeof meta.request === 'function') {
+    r = meta.request(r);
   }
 
   if (query.body) {
