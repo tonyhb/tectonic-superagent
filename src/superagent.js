@@ -26,7 +26,8 @@ import { request } from './request.js';
  */
 const fromSuperagent = (sourceDef, query, success, fail) => {
   let {
-    meta: { url, transform, method, headers }
+    meta: { url, transform, method, headers },
+    meta
   } = sourceDef;
 
   // Parse query params. Only allow query params starting with a letter so that
