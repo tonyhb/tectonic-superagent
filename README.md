@@ -28,5 +28,6 @@ const manager = new Manager({
 	  // for example.
 	  onError: (err) => {}
 	})
+  }
 });
 ```
