@@ -49,17 +49,17 @@ export default class TectonicSuperagent {
 
           // Pass the error into the global onError handler if it exists
           if (opts.onError) {
-            opts.onError(err);
+            opts.onError(err, res);
           }
 
-          return fail(err);
+          return fail(err, res);
         }
 
-        if (sourceDef.meta.transform) {
-          return success(sourceDef.transform(res.body));
+        if (transform) {
+          return success(transform(res.body), res);
         }
 
-        return success(res.body);
+        return success(res.body, res);
       });
     }
 
