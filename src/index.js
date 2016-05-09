@@ -13,7 +13,7 @@ export default class TectonicSuperagent {
 
     const driverFunc = (sourceDef, query, success, fail) => {
       let {
-        meta: { url, transform, method, headers }
+        meta: { url, transform, method, headers, request }
       } = sourceDef;
 
       url = inst.parseUrlParams({ url, query });
@@ -34,8 +34,8 @@ export default class TectonicSuperagent {
 
       // Similarly, if there's a meta.request parameter we should use it to 
       // transform the request for this particular source only
-      if (typeof meta.request === 'function') {
-        r = meta.request(r);
+      if (typeof request === 'function') {
+        r = request(r);
       }
 
       if (query.body) {
